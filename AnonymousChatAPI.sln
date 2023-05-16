@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonymousChatAPI", "AnonymousChatAPI\src\AnonymousChatAPI\AnonymousChatAPI.csproj", "{CB0F545C-F83C-47AE-A0DC-949D82FE9C26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonymousChatAPI", "AnonymousChatAPI\src\AnonymousChatAPI\AnonymousChatAPI.csproj", "{CB0F545C-F83C-47AE-A0DC-949D82FE9C26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{5F5EE13A-D8DA-4452-BA35-9F84A50F9F1D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{0CB2C771-BAAF-4B79-9EC0-1FA2576C9092}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{22FCFBCC-6BB4-478D-A0BB-05F5F8970593}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{22FCFBCC-6BB4-478D-A0BB-05F5F8970593}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{66C3C9FF-32BD-4DB9-8B87-B430DA2AFB65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{66C3C9FF-32BD-4DB9-8B87-B430DA2AFB65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{9CE0F451-B129-4B9A-BD7B-03FF1C2553F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{9CE0F451-B129-4B9A-BD7B-03FF1C2553F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{2AC1AFC0-F6F7-48C0-ACC8-19317DD82ECE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{9CE0F451-B129-4B9A-BD7B-03FF1C2553F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CE0F451-B129-4B9A-BD7B-03FF1C2553F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CE0F451-B129-4B9A-BD7B-03FF1C2553F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AC1AFC0-F6F7-48C0-ACC8-19317DD82ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AC1AFC0-F6F7-48C0-ACC8-19317DD82ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AC1AFC0-F6F7-48C0-ACC8-19317DD82ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AC1AFC0-F6F7-48C0-ACC8-19317DD82ECE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,6 +51,7 @@ Global
 		{22FCFBCC-6BB4-478D-A0BB-05F5F8970593} = {5F5EE13A-D8DA-4452-BA35-9F84A50F9F1D}
 		{66C3C9FF-32BD-4DB9-8B87-B430DA2AFB65} = {5F5EE13A-D8DA-4452-BA35-9F84A50F9F1D}
 		{9CE0F451-B129-4B9A-BD7B-03FF1C2553F5} = {0CB2C771-BAAF-4B79-9EC0-1FA2576C9092}
+		{2AC1AFC0-F6F7-48C0-ACC8-19317DD82ECE} = {5F5EE13A-D8DA-4452-BA35-9F84A50F9F1D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F350F4D6-7FD4-4612-A550-9D0DE551ED8F}
