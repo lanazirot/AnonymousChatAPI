@@ -1,61 +1,41 @@
 ﻿using Application.Interfaces.Services;
+using Application.Models.AWS;
 using Domain.DTOs.Channel;
 using Domain.Enums.Channel;
+using Microsoft.Extensions.Options;
 using StreamChat.Clients;
 using StreamChat.Models;
 using Utils;
 
-using Amazon;
-using Amazon.SecretsManager;
-using Amazon.SecretsManager.Model;
-
 namespace Infrastructure.Services.StreamIO {
+    /// <summary>
+    /// Use this service to interact with StreamIO
+    /// </summary>
     public class StreamIOService : IStreamIOService {
 
         private readonly StreamClientFactory? _clientFactory;
-
-        public StreamIOService() {
-            _clientFactory = new StreamClientFactory("szv7syqafk64", "cjuxzedy69cry4wswqruxnv3z4f2whxm6s72vw2t4usm3afnyh3xtr5f6neew58x");
-        }
-
-
-
-
-        private static async Task<string> GetSecret() {
-            string secretName = "StreamIOApiKeys"; string region = "us-east-2";
-            IAmazonSecretsManager client = new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(region));
-            GetSecretValueRequest request = new() {
-                SecretId = secretName,
-                VersionStage = "AWSCURRENT",
-            };
-            GetSecretValueResponse response;
-            try {
-                response = await client.GetSecretValueAsync(request);
-            } catch {
-                throw;
-            }
-            return response.SecretString;
-        }
+        private readonly StreamIOServiceKeys _streamIOCredentials;
 
         /// <summary>
-        /// Create a new token based in the user email
+        /// Create a new instance of the StreamIOService, using IAM credentials
         /// </summary>
-        /// <param name="Email">User email</param>
-        /// <returns>Token string</returns>
+        /// <param name="options">StreamIOServiceKeys injected by AWS</param>
+        public StreamIOService(IOptions<StreamIOServiceKeys> options) {
+            _streamIOCredentials = options.Value;
+            _clientFactory = new StreamClientFactory(_streamIOCredentials.StreamIOSecret,_streamIOCredentials.StreamIOKey);
+        }
+
+
         public Task<string> CreateToken(string Email) {
             var userClient = _clientFactory!.GetUserClient();
             return Task.FromResult(userClient.CreateToken(Email, DateTimeOffset.UtcNow.AddHours(10)));
         }
 
-        /// <summary>
-        /// Create a new user in the StreamIO
-        /// </summary>
-        /// <param name="Email">User email</param>
-        /// <returns>True if user was created correctly</returns>
+
         public async Task<bool> CreateUser(string Email) {
             var newUser = new UserRequest {
                 Id = Email,
-                Role = Role.Admin,
+                Role = Role.Anonymous,
                 Name = Email,
             };
             var userClient = _clientFactory!.GetUserClient();
@@ -63,11 +43,6 @@ namespace Infrastructure.Services.StreamIO {
             return response.Users.Any();
         }
 
-        /// <summary>
-        /// Create a new anonymous chat channel
-        /// </summary>
-        /// <param name="EmailCreatedBy"></param>
-        /// <returns></returns>
         public async Task<CreateChannelDTO> CreateChannel(CreateChannelDTO createChannelDTO) {
             var newChannel = new ChannelRequest { CreatedBy = new UserRequest { Id = createChannelDTO.Email } };
 
@@ -79,11 +54,6 @@ namespace Infrastructure.Services.StreamIO {
             return createChannelDTO;
         }
 
-        /// <summary>
-        /// Delete an existing channel
-        /// </summary>
-        /// <param name="ChannelId"></param>
-        /// <returns></returns>
         public async Task<bool> DeleteChannel(string ChannelId) {
             //First check if the channel exists
             var channelClient = _clientFactory!.GetChannelClient();
@@ -91,12 +61,6 @@ namespace Infrastructure.Services.StreamIO {
             return response != null;
         }
 
-        /// <summary>
-        /// Add member to an existing channel
-        /// </summary>
-        /// <param name="Email"></param>
-        /// <param name="ChannelId"></param>
-        /// <returns></returns>
         public async Task<AddMemberToChannelDTO> AddMemberToChannel(AddMemberToChannelDTO Member) {
             var channelClient = _clientFactory!.GetChannelClient();
             await channelClient.AddMembersAsync(ChannelType.MESSAGING.GetString(), Member.ChannelID, new[] { Member.Email });

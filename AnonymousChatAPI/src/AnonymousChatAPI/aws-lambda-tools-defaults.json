@@ -5,11 +5,13 @@
     "dotnet lambda help",
     "All the command line options for the Lambda command can be specified in this file."
   ],
-  "profile": "",
-  "region": "",
+  "profile": "default",
+  "region": "us-east-1",
+  "framework": "net6.0",
   "configuration": "Release",
-  "s3-prefix": "AnonymousChatAPI/",
-  "template": "serverless.template",
-  "template-parameters": "",
-  "docker-host-build-output-dir": "./bin/Release/lambda-publish"
+  "function-runtime": "dotnet6",
+  "function-memory-size": 256,
+  "function-timeout": 30,
+  "function-handler": "AnonymousChatAPI::AnonymousChatAPI.LambdaEntryPoint::FunctionHandlerAsync",
+  "template": "serverless.template"
 }

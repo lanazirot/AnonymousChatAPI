@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Services;
+using AwesomeApi.Filters;
 using Domain.DTOs.Channel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,21 +15,21 @@ namespace AnonymousChatAPI.Controllers {
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [ApiKey]
         public async Task<IActionResult> CreateChannel([FromBody] CreateChannelDTO Channel) {
             var request = await _streamIOService.CreateChannel(Channel);
             return Ok(request);
         }
 
         [HttpDelete]
-        [AllowAnonymous]
+        [ApiKey]
         public async Task<IActionResult> DeleteChannel([FromQuery] string ChannelID) {
             var request = await _streamIOService.DeleteChannel(ChannelID);
             return Ok(request);
         }
 
         [HttpPost("add-member-to-channel")]
-        [AllowAnonymous]
+        [ApiKey]
         public async Task<IActionResult> AddMemberToChannel([FromBody] AddMemberToChannelDTO Member) {
             var request = await _streamIOService.AddMemberToChannel(Member);
             return Ok(request);

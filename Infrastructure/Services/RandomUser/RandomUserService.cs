@@ -6,6 +6,9 @@ using RestSharp;
 using Utils;
 
 namespace Infrastructure.Services.RandomUsername {
+    /// <summary>
+    /// Use this service to assign a random username and photo to a user
+    /// </summary>
     public class RandomUserService : IRandomUserService {
         public async Task<RandomUserDTO> AssignRandomUser(string UserIdentifier) {
             if (UserIdentifier.IsEmpty()) throw new UserIdentifierNotGivenException();

@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Persistence\" />
+    <Compile Remove="Persistence\**" />
+    <EmbeddedResource Remove="Persistence\**" />
+    <None Remove="Persistence\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.7.106.36" />
     <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.102.41" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="stream-chat-net" Version="2.1.2" />
   </ItemGroup>
