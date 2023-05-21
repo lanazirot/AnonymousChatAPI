@@ -12,6 +12,11 @@ namespace AnonymousChatAPI.Controllers {
             _randomUserService = randomUserService;
         }
 
+        /// <summary>
+        /// Login with a random user given a UserIdentifier
+        /// </summary>
+        /// <param name="UserIdentifier">User email</param>
+        /// <returns>Ok and a random user</returns>
         [HttpGet("anonymous-login")]
         [AllowAnonymous]
         public async Task<IActionResult> GetRandomUser([FromQuery] string UserIdentifier) {

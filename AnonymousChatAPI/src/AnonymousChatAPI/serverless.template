@@ -8,16 +8,12 @@
     "AspNetCoreFunction": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
-        "PackageType": "Image",
-        "ImageConfig": {
-          "Command": [
-            "AnonymousChatAPI::AnonymousChatAPI.LambdaEntryPoint::FunctionHandlerAsync"
-          ]
-        },
-        "ImageUri": "",
+        "Handler": "AnonymousChatAPI::AnonymousChatAPI.LambdaEntryPoint::FunctionHandlerAsync",
+        "CodeUri": "",
+        "Runtime": "dotnet6",
+        "Architectures": [ "arm64" ],
         "MemorySize": 256,
         "Timeout": 30,
-        "Role": null,
         "Policies": [
           "AWSLambda_FullAccess"
         ],
@@ -37,11 +33,6 @@
             }
           }
         }
-      },
-      "Metadata": {
-        "Dockerfile": "Dockerfile",
-        "DockerContext": ".",
-        "DockerTag": ""
       }
     }
   },

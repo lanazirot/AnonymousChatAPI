@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 namespace Domain.DTOs.RandomUser {
-
+    /// <summary>
+    /// Using https://random-data-api.com/api/v2/ to generate random user data.
+    /// </summary>
     public partial class RandomUserRequestDTO {
         [JsonProperty("id")]
         public long? Id { get; set; }

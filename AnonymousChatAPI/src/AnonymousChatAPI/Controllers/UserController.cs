@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
+using AwesomeApi.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnonymousChatAPI.Controllers {
@@ -14,14 +14,14 @@ namespace AnonymousChatAPI.Controllers {
         }
 
         [HttpGet("connect-user")]
-        [AllowAnonymous]
+        [ApiKey]
         public async Task<IActionResult> GetToken([FromQuery] string Email) {
             var token = await _streamIOService.CreateToken(Email);
             return Ok(token);
         }
 
         [HttpPost("create-user")]
-        [AllowAnonymous]
+        [ApiKey]
         public async Task<IActionResult> CreateUser([FromQuery] string Email) {
             try {
                 await _streamIOService.CreateUser(Email);
