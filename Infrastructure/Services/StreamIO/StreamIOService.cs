@@ -15,14 +15,16 @@ namespace Infrastructure.Services.StreamIO {
 
         private readonly StreamClientFactory? _clientFactory;
         private readonly StreamIOServiceKeys _streamIOCredentials;
+        private readonly IRandomChannelService _randomChannelService;
 
         /// <summary>
         /// Create a new instance of the StreamIOService, using IAM credentials
         /// </summary>
         /// <param name="options">StreamIOServiceKeys injected by AWS</param>
-        public StreamIOService(IOptions<StreamIOServiceKeys> options) {
+        public StreamIOService(IOptions<StreamIOServiceKeys> options, IRandomChannelService randomChannelService) {
             _streamIOCredentials = options.Value;
-            _clientFactory = new StreamClientFactory(_streamIOCredentials.StreamIOSecret,_streamIOCredentials.StreamIOKey);
+            _clientFactory = new StreamClientFactory(_streamIOCredentials.StreamIOSecret, _streamIOCredentials.StreamIOKey);
+            _randomChannelService = randomChannelService;
         }
 
 
@@ -35,7 +37,7 @@ namespace Infrastructure.Services.StreamIO {
         public async Task<bool> CreateUser(string Email) {
             var newUser = new UserRequest {
                 Id = Email,
-                Role = Role.Anonymous,
+                Role = "anon",
                 Name = Email,
             };
             var userClient = _clientFactory!.GetUserClient();
@@ -44,13 +46,13 @@ namespace Infrastructure.Services.StreamIO {
         }
 
         public async Task<CreateChannelDTO> CreateChannel(CreateChannelDTO createChannelDTO) {
-            var newChannel = new ChannelRequest { CreatedBy = new UserRequest { Id = createChannelDTO.Email } };
-
+            var newChannel = new ChannelRequest { CreatedBy = new UserRequest { Id = createChannelDTO.Email }  };
             var channelClient = _clientFactory!.GetChannelClient();
-            await channelClient.GetOrCreateAsync(ChannelType.MESSAGING.GetString(), "general", new ChannelGetRequest {
+            var randomChannelName = await _randomChannelService.GetRandomChannelName();
+            await channelClient.GetOrCreateAsync(ChannelType.MESSAGING.GetString(), randomChannelName.Name, new ChannelGetRequest {
                 Data = newChannel
             });
-
+            await channelClient.AddMembersAsync(ChannelType.MESSAGING.GetString(), randomChannelName.Name, new[] { createChannelDTO.Email });
             return createChannelDTO;
         }
 

@@ -15,7 +15,10 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Policies": [
-          "AWSLambda_FullAccess"
+          "AWSLambda_FullAccess",
+          "SecretsManagerReadWrite",
+          "AWSLambdaSecretPolicy",
+          "AWSLambdaBasicExecutionRole"
         ],
         "Events": {
           "ProxyResource": {
