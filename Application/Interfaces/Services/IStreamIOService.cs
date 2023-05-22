@@ -19,7 +19,7 @@ namespace Application.Interfaces.Services {
         /// </summary>
         /// <param name="createChannelDTO">Channel properties</param>
         /// <returns>Same created channel</returns>
-        Task<CreateChannelDTO> CreateChannel(CreateChannelDTO createChannelDTO);
+        Task<CreateChannelResponseDTO> CreateChannel(CreateChannelDTO createChannelDTO);
         /// <summary>
         /// Delete a channel in StreamIO
         /// </summary>

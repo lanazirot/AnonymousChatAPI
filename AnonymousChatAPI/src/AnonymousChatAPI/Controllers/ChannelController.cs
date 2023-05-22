@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces.Services;
 using AwesomeApi.Filters;
 using Domain.DTOs.Channel;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnonymousChatAPI.Controllers {

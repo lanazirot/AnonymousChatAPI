@@ -45,19 +45,19 @@ namespace Infrastructure.Services.StreamIO {
             return response.Users.Any();
         }
 
-        public async Task<CreateChannelDTO> CreateChannel(CreateChannelDTO createChannelDTO) {
+        public async Task<CreateChannelResponseDTO> CreateChannel(CreateChannelDTO createChannelDTO) {
             var newChannel = new ChannelRequest { CreatedBy = new UserRequest { Id = createChannelDTO.Email }  };
             var channelClient = _clientFactory!.GetChannelClient();
             var randomChannelName = await _randomChannelService.GetRandomChannelName();
-            await channelClient.GetOrCreateAsync(ChannelType.MESSAGING.GetString(), randomChannelName.Name, new ChannelGetRequest {
-                Data = newChannel
-            });
+            await channelClient.GetOrCreateAsync(ChannelType.MESSAGING.GetString(), randomChannelName.Name, new ChannelGetRequest { Data = newChannel });
             await channelClient.AddMembersAsync(ChannelType.MESSAGING.GetString(), randomChannelName.Name, new[] { createChannelDTO.Email });
-            return createChannelDTO;
+            return new CreateChannelResponseDTO {
+                RandomName = randomChannelName.Name,
+                CreatedBy = createChannelDTO.Email
+            };
         }
 
         public async Task<bool> DeleteChannel(string ChannelId) {
-            //First check if the channel exists
             var channelClient = _clientFactory!.GetChannelClient();
             var response = await channelClient.DeleteAsync(ChannelType.MESSAGING.GetString(), ChannelId);
             return response != null;
