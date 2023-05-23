@@ -32,5 +32,19 @@ namespace Application.Interfaces.Services {
         /// <param name="addMemberToChannelDTO">Member properties</param>
         /// <returns>Same created member</returns>
         Task<AddMemberToChannelDTO> AddMemberToChannel(AddMemberToChannelDTO addMemberToChannelDTO);
+        /// <summary>
+        /// Delete a member from a channel in StreamIO
+        /// </summary>
+        /// <param name="ChannelId">Channel ID</param>
+        /// <returns>True, if member was deleted sucessfully</returns>
+        Task<bool> DeleteMember(string ChannelId, string MemberId);
+        /// <summary>
+        /// Use this method to add a member if user coordenates are inside the channel radius
+        /// </summary>
+        /// <param name="MemberId"></param>
+        /// <returns>
+        /// The channel DTO if the user is inside the channel radius
+        /// </returns>
+        Task<ChannelDTO>? RevealNewChatForCurrentUser(ChannelMemberDTO channelMemberDTO);
     }
 }
