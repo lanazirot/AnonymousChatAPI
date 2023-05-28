@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.Channel;
+using Domain.DTOs.User;
 
 namespace Application.Interfaces.Services {
     public interface IStreamIOService {
@@ -32,5 +33,26 @@ namespace Application.Interfaces.Services {
         /// <param name="addMemberToChannelDTO">Member properties</param>
         /// <returns>Same created member</returns>
         Task<AddMemberToChannelDTO> AddMemberToChannel(AddMemberToChannelDTO addMemberToChannelDTO);
+        /// <summary>
+        /// Delete a member from a channel in StreamIO
+        /// </summary>
+        /// <param name="ChannelId">Channel ID</param>
+        /// <returns>True, if member was deleted sucessfully</returns>
+        Task<bool> DeleteMember(string ChannelId, string MemberId);
+        /// <summary>
+        /// Use this method to add a member if user coordenates are inside the channel radius
+        /// </summary>
+        /// <param name="MemberId"></param>
+        /// <returns>
+        /// The channel DTO if the user is inside the channel radius
+        /// </returns>
+        Task<ChannelDTO>? RevealNewChatForCurrentUser(ChannelMemberDTO channelMemberDTO);
+        /// <summary>
+        /// Use this method to check if the user is still inside the channel radius
+        /// </summary>
+        /// <param name="ChannelId">Channel ID</param>
+        /// <param name="userCoordinatesDTO">User coordinates</param>
+        /// <returns>True if user still in the channel radius</returns>
+        Task<bool> CheckIfUserStillInTheRoomByItsCurrentLocation(string ChannelId, UserCoordinatesDTO userCoordinatesDTO);
     }
 }

@@ -1,4 +1,7 @@
-﻿using Application.Interfaces;
+﻿using AnonymousChatAPI.Middlewares;
+using Application.Implementations.Internal;
+using Application.Interfaces;
+using Application.Interfaces.Internal;
 using Application.Interfaces.Services;
 using Application.Models.AWS;
 using Infrastructure.Services.RandomChannel;
@@ -17,6 +20,7 @@ namespace AnonymousChatAPI {
             services.AddTransient<IStreamIOService, StreamIOService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRandomChannelService, RandomChannelService>();
+            services.AddTransient<IGeoLocation, GeoLocation>();
             services.AddControllers();
             services.Configure<StreamIOServiceKeys>(Configuration);
         }
@@ -26,6 +30,7 @@ namespace AnonymousChatAPI {
             }
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseMiddleware<SystemExceptionMiddleware>();
             app.UseCors(builder => builder
                            .AllowAnyOrigin()
                            .AllowAnyMethod()
