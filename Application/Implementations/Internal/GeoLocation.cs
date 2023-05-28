@@ -3,11 +3,11 @@ using Domain.DTOs.Channel;
 using Utils;
 namespace Application.Implementations.Internal {
     public class GeoLocation : IGeoLocation {
-        public double CalculateDistance(LatLong originalCoordenates, LatLong givenCoordenates) {
-            double lat1Rad = originalCoordenates.Lat.ToRadians();
-            double lon1Rad = originalCoordenates.Long.ToRadians();
-            double lat2Rad = givenCoordenates.Lat.ToRadians();
-            double lon2Rad = givenCoordenates.Long.ToRadians();
+        public double CalculateDistance(LatLongDTO originalCoordenates, LatLongDTO givenCoordenates) {
+            double lat1Rad = originalCoordenates.Latitude.ToRadians();
+            double lon1Rad = originalCoordenates.Longitude.ToRadians();
+            double lat2Rad = givenCoordenates.Latitude.ToRadians();
+            double lon2Rad = givenCoordenates.Longitude.ToRadians();
             double deltaLat = lat2Rad - lat1Rad;
             double deltaLon = lon2Rad - lon1Rad;
             double a = Math.Pow(Math.Sin(deltaLat / 2), 2) +

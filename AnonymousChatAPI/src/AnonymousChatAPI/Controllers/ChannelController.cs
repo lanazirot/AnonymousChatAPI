@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Services;
 using AwesomeApi.Filters;
 using Domain.DTOs.Channel;
+using Domain.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnonymousChatAPI.Controllers {
@@ -31,6 +32,13 @@ namespace AnonymousChatAPI.Controllers {
         [ApiKey]
         public async Task<IActionResult> AddMemberToChannel([FromBody] AddMemberToChannelDTO Member) {
             var request = await _streamIOService.AddMemberToChannel(Member);
+            return Ok(request);
+        }
+
+        [HttpPost("check-if-user-still-in-the-room")]
+        [ApiKey]
+        public async Task<IActionResult> CheckIfUserStillInTheRoomByItsCurrentLocation([FromQuery] string ChannelID, [FromBody] UserCoordinatesDTO userCoordinatesDTO) {
+            var request = await _streamIOService.CheckIfUserStillInTheRoomByItsCurrentLocation(ChannelID, userCoordinatesDTO);
             return Ok(request);
         }
     }

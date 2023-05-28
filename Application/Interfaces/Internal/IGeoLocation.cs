@@ -7,7 +7,7 @@ public interface IGeoLocation {
     /// <param name="originalCoordenates">Original coordenates</param>
     /// <param name="givenCoordenates">Given coordenates</param>
     /// <returns>Distance between both coordenates using Haversine formule</returns>
-    public double CalculateDistance(LatLong originalCoordenates, LatLong givenCoordenates);
+    public double CalculateDistance(LatLongDTO originalCoordenates, LatLongDTO givenCoordenates);
     /// <summary>
     /// Earth radius in meters
     /// </summary>
