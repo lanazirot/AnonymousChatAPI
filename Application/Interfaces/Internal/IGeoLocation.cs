@@ -15,5 +15,5 @@ public interface IGeoLocation {
     /// <summary>
     /// Use this constant to compare when a user is in the same channel
     /// </summary>
-    public const float MaxRadiusFromOrigin = 50.0f;
+    public const float MaxRadiusFromOrigin = 100.0f;
 }

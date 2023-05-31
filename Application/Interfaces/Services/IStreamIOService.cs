@@ -46,7 +46,7 @@ namespace Application.Interfaces.Services {
         /// <returns>
         /// The channel DTO if the user is inside the channel radius
         /// </returns>
-        Task<ChannelDTO>? RevealNewChatForCurrentUser(ChannelMemberDTO channelMemberDTO);
+        Task RevealNewChatForCurrentUser(ChannelMemberDTO channelMemberDTO);
         /// <summary>
         /// Use this method to check if the user is still inside the channel radius
         /// </summary>

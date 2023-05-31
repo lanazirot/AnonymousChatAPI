@@ -84,39 +84,48 @@ namespace Infrastructure.Services.StreamIO {
             return Member;
         }
 
-        public Task<bool> DeleteMember(string ChannelId, string MemberId) {
+        private Task<bool> LocalDeleteMember(string ChannelId, string MemberId) {
             var channelClient = _clientFactory!.GetChannelClient();
-            //Remove "messaging:" from ChannelId because StreamIO doesn't accept it. Btw, wtf with 2 IDs??
+            return Task.FromResult(channelClient.RemoveMembersAsync(ChannelType.MESSAGING.GetString(), ChannelId, new[] { MemberId }).IsCompletedSuccessfully);
+        }
+
+        public Task<bool> DeleteMember(string ChannelId, string MemberId) {
             var channel = ChannelId.Split(":")[1];
-            return Task.FromResult(channelClient.RemoveMembersAsync(ChannelType.MESSAGING.GetString(), channel, new[] { MemberId }).IsCompletedSuccessfully);
+            return LocalDeleteMember(channel, MemberId);
         }
 
         public Task<bool> CheckIfUserStillInTheRoomByItsCurrentLocation(string ChannelId, UserCoordinatesDTO userCoordinatesDTO) {
             var channelClient = _clientFactory!.GetChannelClient();
 
-            //Get channel coordenates
-            var channelResponse = channelClient.QueryChannelsAsync(QueryChannelsOptions.Default.WithFilter(new Dictionary<string, object>{{ "cid", ChannelId }}));
-
+            var channelResponse = channelClient.QueryChannelsAsync(QueryChannelsOptions.Default.WithFilter(new Dictionary<string, object> { { "cid", ChannelId } }));
             var channel = channelResponse.Result.Channels.FirstOrDefault()!.Channel ?? throw new ChannelNotFoundException("Channel not found");
-
             var latLongChannel = new LatLongDTO(channel.GetData<double>("latitude"), channel.GetData<double>("longitude"));
-
             var distance = _geoLocation.CalculateDistance(latLongChannel, userCoordinatesDTO.CurrentCoords);
 
             if (distance > IGeoLocation.MaxRadiusFromOrigin) {
-                //Delete user from channel
                 DeleteMember(ChannelId, userCoordinatesDTO.Email);
                 return Task.FromResult(false);
             }
-
             return Task.FromResult(true);
         }
 
-        public Task<ChannelDTO>? RevealNewChatForCurrentUser(ChannelMemberDTO channelMemberDTO) {
+        public async Task RevealNewChatForCurrentUser(ChannelMemberDTO channelMemberDTO) {
 
+            var channelClient = _clientFactory!.GetChannelClient();
+            var userCurrentLocation = new LatLongDTO(channelMemberDTO.CurrentCoords.Latitude, channelMemberDTO.CurrentCoords.Longitude);
 
+            var channelsResponse = await channelClient.QueryChannelsAsync(QueryChannelsOptions.Default.WithFilter(new Dictionary<string, object> { { "type", ChannelType.MESSAGING.GetString()! } }));
+            var channels = channelsResponse.Channels;
 
-            return null;
+            channels.ForEach(async channel => {
+                var latitude = channel.Channel.GetData<double>("latitude");
+                var longitude = channel.Channel.GetData<double>("longitude");
+                var channelLocation = new LatLongDTO(latitude, longitude);
+                var distance = _geoLocation.CalculateDistance(userCurrentLocation, channelLocation);
+                var isInRange = distance <= IGeoLocation.MaxRadiusFromOrigin;
+                if (!isInRange) await LocalDeleteMember(channel.Channel.Id, channelMemberDTO.Email);
+                else await AddMemberToChannel(new AddMemberToChannelDTO(channel.Channel.Id, channelMemberDTO.Email));
+            });
         }
     }
 }
