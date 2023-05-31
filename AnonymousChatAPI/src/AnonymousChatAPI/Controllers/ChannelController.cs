@@ -3,6 +3,7 @@ using AwesomeApi.Filters;
 using Domain.DTOs.Channel;
 using Domain.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace AnonymousChatAPI.Controllers {
     [Route("api/[controller]")]
@@ -40,6 +41,13 @@ namespace AnonymousChatAPI.Controllers {
         public async Task<IActionResult> CheckIfUserStillInTheRoomByItsCurrentLocation([FromQuery] string ChannelID, [FromBody] UserCoordinatesDTO userCoordinatesDTO) {
             var request = await _streamIOService.CheckIfUserStillInTheRoomByItsCurrentLocation(ChannelID, userCoordinatesDTO);
             return Ok(request);
+        }
+
+        [HttpPost("reveal-chats-for-user")]
+        [ApiKey]
+        public async Task<IActionResult> RevealNewChatForCurrentUser([FromBody] ChannelMemberDTO channelMemberDTO) {
+            await _streamIOService.RevealNewChatForCurrentUser(channelMemberDTO);
+            return Ok();
         }
     }
 }
