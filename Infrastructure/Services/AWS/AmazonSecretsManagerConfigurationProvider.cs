@@ -21,6 +21,7 @@ namespace Infrastructure.Services.AWS {
 
         public override void Load() {
             var secret = GetSecret();
+
             Data = JsonSerializer.Deserialize<Dictionary<string, string>>(secret)!;
         }
 
