@@ -53,6 +53,6 @@ namespace Application.Interfaces.Services {
         /// <param name="ChannelId">Channel ID</param>
         /// <param name="userCoordinatesDTO">User coordinates</param>
         /// <returns>True if user still in the channel radius</returns>
-        Task<bool> CheckIfUserStillInTheRoomByItsCurrentLocation(string ChannelId, UserCoordinatesDTO userCoordinatesDTO);
+        Task<bool> CheckIfUserStillInTheRoomByItsCurrentLocation(UserCoordinatesDTO userCoordinatesDTO);
     }
 }

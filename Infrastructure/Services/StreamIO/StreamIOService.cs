@@ -63,13 +63,15 @@ namespace Infrastructure.Services.StreamIO {
 
             var channelClient = _clientFactory!.GetChannelClient();
             var randomChannelName = await _randomChannelService.GetRandomChannelName();
-            await channelClient.GetOrCreateAsync(ChannelType.MESSAGING.GetString(), randomChannelName.Name, new ChannelGetRequest { Data = newChannel });
+            var createdChannel = await channelClient.GetOrCreateAsync(ChannelType.MESSAGING.GetString(), randomChannelName.Name, new ChannelGetRequest { Data = newChannel });
             await channelClient.AddMembersAsync(ChannelType.MESSAGING.GetString(), randomChannelName.Name, new[] { createChannelDTO.Email });
 
+  
             return new CreateChannelResponseDTO {
                 RandomName = randomChannelName.Name,
-                CreatedBy = createChannelDTO.Email
-            };
+                CreatedBy = createChannelDTO.Email,
+                Cid = createdChannel.Channel.Cid
+        };
         }
 
         public async Task<bool> DeleteChannel(string ChannelId) {
@@ -94,16 +96,16 @@ namespace Infrastructure.Services.StreamIO {
             return LocalDeleteMember(channel, MemberId);
         }
 
-        public Task<bool> CheckIfUserStillInTheRoomByItsCurrentLocation(string ChannelId, UserCoordinatesDTO userCoordinatesDTO) {
+        public Task<bool> CheckIfUserStillInTheRoomByItsCurrentLocation(UserCoordinatesDTO userCoordinatesDTO) {
             var channelClient = _clientFactory!.GetChannelClient();
 
-            var channelResponse = channelClient.QueryChannelsAsync(QueryChannelsOptions.Default.WithFilter(new Dictionary<string, object> { { "cid", ChannelId } }));
+            var channelResponse = channelClient.QueryChannelsAsync(QueryChannelsOptions.Default.WithFilter(new Dictionary<string, object> { { "cid", userCoordinatesDTO.ChannelID } }));
             var channel = channelResponse.Result.Channels.FirstOrDefault()!.Channel ?? throw new ChannelNotFoundException("Channel not found");
             var latLongChannel = new LatLongDTO(channel.GetData<double>("latitude"), channel.GetData<double>("longitude"));
             var distance = _geoLocation.CalculateDistance(latLongChannel, userCoordinatesDTO.CurrentCoords);
 
             if (distance > IGeoLocation.MaxRadiusFromOrigin) {
-                DeleteMember(ChannelId, userCoordinatesDTO.Email);
+                DeleteMember(userCoordinatesDTO.ChannelID, userCoordinatesDTO.Email);
                 return Task.FromResult(false);
             }
             return Task.FromResult(true);

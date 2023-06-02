@@ -38,8 +38,8 @@ namespace AnonymousChatAPI.Controllers {
 
         [HttpPost("check-if-user-still-in-the-room")]
         [ApiKey]
-        public async Task<IActionResult> CheckIfUserStillInTheRoomByItsCurrentLocation([FromQuery] string ChannelID, [FromBody] UserCoordinatesDTO userCoordinatesDTO) {
-            var request = await _streamIOService.CheckIfUserStillInTheRoomByItsCurrentLocation(ChannelID, userCoordinatesDTO);
+        public async Task<IActionResult> CheckIfUserStillInTheRoomByItsCurrentLocation([FromBody] UserCoordinatesDTO userCoordinatesDTO) {
+            var request = await _streamIOService.CheckIfUserStillInTheRoomByItsCurrentLocation(userCoordinatesDTO);
             return Ok(request);
         }
 
@@ -47,6 +47,12 @@ namespace AnonymousChatAPI.Controllers {
         [ApiKey]
         public async Task<IActionResult> RevealNewChatForCurrentUser([FromBody] ChannelMemberDTO channelMemberDTO) {
             await _streamIOService.RevealNewChatForCurrentUser(channelMemberDTO);
+            return Ok();
+        }
+
+        [HttpPost("health")]
+        [ApiKey]
+        public async Task<IActionResult> Health() {
             return Ok();
         }
     }
