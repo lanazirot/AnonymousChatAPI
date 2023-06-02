@@ -1,9 +1,11 @@
 ﻿using AnonymousChatAPI.Middlewares;
 using Application.Implementations.Internal;
 using Application.Interfaces;
+using Application.Interfaces.Email;
 using Application.Interfaces.Internal;
 using Application.Interfaces.Services;
 using Application.Models.AWS;
+using Infrastructure.Services.Email;
 using Infrastructure.Services.RandomChannel;
 using Infrastructure.Services.RandomUsername;
 using Infrastructure.Services.StreamIO;
@@ -21,8 +23,12 @@ namespace AnonymousChatAPI {
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRandomChannelService, RandomChannelService>();
             services.AddTransient<IGeoLocation, GeoLocation>();
+            services.AddTransient<IMailService, SmtpMailService>();
+
             services.AddControllers();
             services.Configure<StreamIOServiceKeys>(Configuration);
+            services.Configure<SMTPKeys>(Configuration);
+            services.Configure<SupportMailEntity>(Configuration);
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
